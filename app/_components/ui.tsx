@@ -20,13 +20,22 @@ export function Pill({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function Card({ children, className }: { children: React.ReactNode; className?: string }) {
+export function Card({ 
+  children, 
+  className,
+  style 
+}: { 
+  children: React.ReactNode; 
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <div
       className={cx(
         "rounded-3xl border border-[rgb(var(--border))] bg-[rgba(var(--surface),0.72)] p-6 shadow-sm backdrop-blur",
         className
       )}
+      style={style}
     >
       {children}
     </div>

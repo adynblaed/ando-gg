@@ -627,6 +627,18 @@ function validate(state: State): FieldErrors {
   return next;
 }
 
+function validatePartnership(email: string, notes: string): FieldErrors {
+  const next: FieldErrors = {};
+
+  const emailTrimmed = email.trim();
+  if (!emailTrimmed) next.email = "Email is required.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailTrimmed)) next.email = "Enter a valid email.";
+
+  if (notes.length > 1000) next.notes = "Keep notes under 1000 characters.";
+
+  return next;
+}
+
 function formatAvailabilitySlot(slot: string): string {
   const [day, blockId] = slot.split("-");
   const block = AVAILABILITY_BLOCKS.find((b) => b.id === blockId);
@@ -648,8 +660,8 @@ function buildAvailabilityNote(state: State, maxLength: number): string {
       const da = dayOrder.get(a.day as (typeof AVAILABILITY_DAYS)[number]) ?? 999;
       const db = dayOrder.get(b.day as (typeof AVAILABILITY_DAYS)[number]) ?? 999;
       if (da !== db) return da - db;
-      const ba = blockOrder.get(a.blockId) ?? 999;
-      const bb = blockOrder.get(b.blockId) ?? 999;
+      const ba = blockOrder.get(a.blockId as "morning" | "afternoon" | "evening" | "late") ?? 999;
+      const bb = blockOrder.get(b.blockId as "morning" | "afternoon" | "evening" | "late") ?? 999;
       return ba - bb;
     });
 
@@ -1028,7 +1040,7 @@ export default function Home() {
 
   const [partnerEmail, setPartnerEmail] = useState("");
   const [partnerNotes, setPartnerNotes] = useState("");
-  const [partnerErrors, setPartnerErrors] = useState<PartnerErrors>({});
+  const [partnerErrors, setPartnerErrors] = useState<FieldErrors>({});
   const [partnerSubmitting, setPartnerSubmitting] = useState(false);
   const [partnerSubmitted, setPartnerSubmitted] = useState<null | { ok: boolean; message: string }>(null);
 

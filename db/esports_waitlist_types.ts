@@ -16,7 +16,7 @@ export type BBRegion =
 export type BBMembership =
   | "Tier 1 (Free) Registered Local"
   | "Tier 2 ($3/mo) Player Profile"
-  | "Tier 3 ($10/mo) Team Profile"
+  | "Tier 3 ($5/mo) Captain Profile"
   | "Coach / Leadership Track Interest";
 
 export type BBPlayIntent = "Casual" | "Competitive" | "Both";

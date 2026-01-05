@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
     
     return config;
   },
+  // Explicitly use webpack (not Turbopack) due to custom module resolution config
+  turbopack: {},
 };
 
 export default nextConfig;
