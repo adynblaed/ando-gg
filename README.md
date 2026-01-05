@@ -53,6 +53,40 @@ public/              # Static assets (fonts, images)
 proxy.ts             # Clerk middleware (Next.js 16+)
 ```
 
+## Architecture
+
+### Signup Flow
+
+```
+                    User Visits Site
+                           │
+            ┌──────────────┼──────────────┐
+            │              │              │
+            ▼              ▼              ▼
+      [Clerk SignUp]  [Waitlist Form]  [Partnership Form]
+            │              │              │
+            │              ▼              ▼
+            │      POST /api/waitlist  POST /api/partnerships
+            │              │              │
+            │              ▼              ▼
+            │           Validation & Processing
+            │              │              │
+            │              ├──────────────┘
+            │              │
+            ▼              ▼
+    ┌───────────────┐  ┌──────────────────────────────┐
+    │  Clerk Cloud  │  │   Local File Storage (Temp)  │
+    │               │  │                              │
+    │ • User Mgmt   │  │ • .data/waitlist.ndjson      │
+    │ • Email       │  │ • .data/partnerships.ndjson  │
+    │ • Contact List│  │                              │
+    └───────────────┘  └──────────────────────────────┘
+```
+
+**Clerk Flow:** Users click `SignUpButton` → Clerk handles authentication → User data stored in Clerk → Enables email outreach and contact list management via Clerk dashboard.
+
+**Form Flows:** Users submit waitlist or partnership forms → Validated via API routes → Stored in local `.data/*.ndjson` files → Available for lead management and follow-up.
+
 ## Key Features
 
 **Authentication:** Clerk integration via `proxy.ts` middleware and `ClerkProvider` in `app/layout.tsx`.
