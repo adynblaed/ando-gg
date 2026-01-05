@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ando.gg/schemas/waitlist-signup.v1.json",
+  "title": "Ando eSports Waitlist Signup (LTS)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "email",
+    "clubUsername",
+    "locality",
+    "games",
+    "desiredMembership",
+    "playIntent",
+    "preferredPlayTimes",
+    "consent"
+  ],
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254,
+      "description": "Primary contact email for launch updates and first-wave invites."
+    },
+
+    "clubUsername": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 24,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9 _\\-\\.]{0,22}[A-Za-z0-9]$",
+      "description": "Your Ando club name (used for lookup and future profile)."
+    },
+
+    "connectedUsernames": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional connected accounts for faster lookup and future linking.",
+      "properties": {
+        "discordUsername": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "description": "Optional. Discord username (new format without discriminator preferred)."
+        },
+        "steamUsername": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 50,
+          "description": "Optional. Steam username / profile name (not necessarily unique)."
+        },
+        "riotUsername": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 60,
+          "description": "Optional. Riot ID (e.g., Name#TAG)."
+        }
+      }
+    },
+
+    "locality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["isNorthernNevadaLocal", "region"],
+      "properties": {
+        "isNorthernNevadaLocal": {
+          "type": "boolean",
+          "description": "Whether you identify as local to Northern Nevada."
+        },
+        "region": {
+          "type": "string",
+          "enum": [
+            "Reno",
+            "Sparks",
+            "Carson City",
+            "Tahoe/Truckee",
+            "Fernley",
+            "Fallon",
+            "Other Northern Nevada",
+            "Not Local"
+          ],
+          "description": "General region for organizing first-wave cohorts."
+        },
+        "zipCode": {
+          "type": "string",
+          "pattern": "^[0-9]{5}(-[0-9]{4})?$",
+          "description": "Optional. Used only for launch planning; not displayed publicly."
+        }
+      }
+    },
+
+    "games": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "description": "Games you want to participate in at Ando (select a few—can add more later).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gameId", "gameName"],
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Stable slug (e.g., valorant, league-of-legends, arc-raiders, marvel-rivals)."
+          },
+          "gameName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80,
+            "description": "Human-readable game name. Supports future titles without schema changes."
+          },
+          "platforms": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": ["PC", "PlayStation", "Xbox", "Switch", "Mobile", "Other"]
+            },
+            "description": "Optional. Platforms you play on for this game."
+          },
+
+          "primaryHandle": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 50,
+            "description": "Optional. Your primary in-game name / ID for this game."
+          },
+
+          "skillSelfReport": {
+            "type": "string",
+            "enum": ["New", "Casual", "Ranked", "High Ranked", "Prefer Not To Say"],
+            "description": "Optional. Used for better matchmaking cohorts."
+          },
+
+          "roleOrStyle": {
+            "type": "string",
+            "maxLength": 60,
+            "description": "Optional. Role/class/lane/archetype (e.g., Support, Duelist, Jungle, Tank, Flex)."
+          }
+        }
+      }
+    },
+
+    "desiredMembership": {
+      "type": "string",
+      "enum": [
+        "Tier 1 (Free) Registered Local",
+        "Tier 2 ($3/mo) Player Profile",
+        "Tier 3 ($10/mo) Team Profile",
+        "Coach / Leadership Track Interest"
+      ],
+      "description": "Which membership you want when we open (waitlist only; no payment today)."
+    },
+
+    "playIntent": {
+      "type": "string",
+      "enum": ["Casual", "Competitive", "Both"],
+      "description": "How you want to participate most."
+    },
+
+    "preferredPlayTimes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Weeknights", "Weekends", "Late Nights", "Flexible"]
+      },
+      "description": "When you usually play (helps us plan nights and match teams)."
+    },
+
+    "proInterest": {
+      "type": "string",
+      "enum": ["Yes", "Maybe", "Not right now"],
+      "description": "Interest in higher-structure play and leadership pathways."
+    },
+
+    "eventInterest": {
+      "type": "boolean",
+      "description": "Whether you want updates about in-store events/showcases."
+    },
+
+    "notes": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Optional. Anything helpful: preferred comm style, goals, accessibility needs, etc."
+    },
+
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["emailUpdates", "privacyAcknowledgement"],
+      "properties": {
+        "emailUpdates": {
+          "type": "boolean",
+          "const": true,
+          "description": "Required. Consent to receive launch and first-wave emails."
+        },
+        "privacyAcknowledgement": {
+          "type": "boolean",
+          "const": true,
+          "description": "Required. Acknowledges the privacy notice / data use."
+        }
+      }
+    },
+
+    "marketingAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional. Helps measure what outreach works (flyers, business cards, socials).",
+      "properties": {
+        "source": { "type": "string", "maxLength": 60 },
+        "campaign": { "type": "string", "maxLength": 80 },
+        "medium": { "type": "string", "maxLength": 60 }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Server-managed fields. Do not request from users.",
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "schemaVersion": { "type": "string", "const": "1.0.0" }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ando.gg/schemas/partnership-lead.v1.json",
+  "title": "Ando eSports Partnership Lead (LTS)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["email"],
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254,
+      "description": "Primary contact email for partnership follow-up."
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional. Context for the partnership request."
+    },
+    "marketingAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional. Helps measure what outreach works (events, referrals, socials).",
+      "properties": {
+        "source": { "type": "string", "maxLength": 60 },
+        "campaign": { "type": "string", "maxLength": 80 },
+        "medium": { "type": "string", "maxLength": 60 }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Server-managed fields. Do not request from users.",
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "schemaVersion": { "type": "string", "const": "1.0.0" }
+      }
+    }
+  }
+}
+
+
